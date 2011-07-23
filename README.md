@@ -46,6 +46,6 @@ A simple location-based to do list manager.
 
 ## About
 
-Written in nano on a Nokia N900, using the 
+Written in nano, partly on a Nokia N900, using the 
 "python -m SimpleHTTPServer" for testing.
 
