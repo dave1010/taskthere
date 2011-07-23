@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <title>To Do There</title>
 <style>
+body { font-family: sans; }
 #t {
   margin: 0; padding: 0;
 }
@@ -23,21 +24,23 @@
 
 <h2>Places</h2>
 
+<div id="place-selector">
+
 <select id="p">
 </select>
 
-<a href="#">Edit</a>
-<a href="#">New place</a>
+<input type="button" onclick="start_edit_place();return false" value="Edit" />
+<input type="button" onclick="new_place();return false" value="New place" />
 
-<fieldset>
+</div>
+
+<fieldset style="display:none" id="edit-place"">
   <legend>Edit place</legend>
-  Name: <input value="Home" /><br />
-  Lat: <input value="51.7" /><br />
-  Long: <input value="-1.5" /><br />
-  <input type="button" value="Set location to here" />
-  <input type="button" value="Save" />
-  <input type="button" value="Show map" />
-  
+  Name: <input id="place-name" value="" /><br />
+  Lat: <input id="place-lat" value="" /><br />
+  Long: <input id="place-lng" value="" /><br />
+  <input type="button" value="Save" onclick="save_edit_place()"/>
+  <input type="button" value="Cancel" onclick="cancel_edit_place()" />
 </fieldset>
 
 <h2>Tasks</h2>
@@ -80,6 +83,30 @@ var places = {
     tasks: ['Do some work', 'Code']
   }
 };
+
+function start_edit_place() {
+  $('#edit-place').show();
+  $('#place-selector').hide();
+
+  var p = places[place()];
+  $('#place-name').val(p.name);
+  $('#place-lat').val(p.lat);
+  $('#place-lng').val(p.lng);
+}
+
+function cancel_edit_place() {
+  $('#edit-place').hide();
+  $('#place-selector').show();
+}
+
+function save_edit_place() {
+  alert('not implemented');
+  cancel_edit_place();
+}
+
+function new_place() {
+  alert('adding new place not implemented');
+}
 
 function add_task() {
   if (!place()) {

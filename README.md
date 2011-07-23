@@ -18,10 +18,13 @@ A simple location-based to do list manager.
 * Allow editing and deleting places
 * Automatically switch places based on geolocation
 * Controls for geolocation (update interval)
+* Show geolocation info
 * Remove jQuery
 
 ## Ideas
 
+* Undo delete task
+* Update a place to current geolocation
 * Google map
 * Due date / start date
 * Tags / hierachy
