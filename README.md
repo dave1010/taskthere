@@ -20,13 +20,20 @@ A simple location-based to do list manager.
 * Controls for geolocation (update interval)
 * Remove jQuery
 
+## Ideas
+
+* Google map
+* Due date / start date
+* Tags / hierachy
+
 ## Design Goals
 
-* Be usable
+* Be easy to understand
+* Be quick to add tasks
+* Be very quick to delete tasks (use case: shopping list)
 * Look ok
 * Be a single page HTML document
-* Work offline
-* Work without any server-side technology
+* Work offline & without any server-side technology
 * Be usable as a mobile homescreen widget
 
 ## Non-goals
