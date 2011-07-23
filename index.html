@@ -1,0 +1,119 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<title>To Do There</title>
+</head>
+<body>
+
+<h1>To Do There</h1>
+
+<h2>Places</h2>
+
+<select id="p">
+  <option>Home (5 tasks here)</option>
+  <option>Work (2 tasks 0.5m away)</option>
+  <option>Store (9 tasks 1m away)</option>
+</select>
+
+<a href="#">Edit</a>
+<a href="#">New place</a>
+
+<fieldset>
+  <legend>Edit place</legend>
+  Name: <input value="Home" /><br />
+  Lat: <input value="51.7" /><br />
+  Long: <input value="-1.5" /><br />
+  <input type="button" value="Set location to here" />
+  <input type="button" value="Save" />
+  <input type="button" value="Show map" />
+  
+</fieldset>
+
+<h2>Tasks</h2>
+<input />
+<input type="button" value="Add" />
+
+
+<ul id="t">
+<li><a href="#">Build todo program</a></li>
+</ul>
+
+<h2>About</h2>
+
+<p>
+To Do There lets you add tasks to certain places.
+</p>
+<p>
+&copy; 2011 Dave Hulbert
+</p>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		
+<script>
+
+var current_place = 'Home';
+var places = {
+  Home: {
+    name: 'Home',
+    lat: 52,
+    lng: -1,
+    tasks: ['Make a todo program', 'Tidy']
+  },
+  Work: {
+    name: 'Work',
+    lat: 53,
+    lng: -1,
+    tasks: ['Do some work', 'Code']
+  }
+};
+
+function build_select() {
+  var options = '';
+  for (var i in places) {
+      options += '<option>' + places[i].name + '</option>';
+  }
+  $('#p').html(options);
+}
+
+function place_change(el) {
+  //window.current_place = 'Home";  
+}
+
+function delete_task(title) {
+  // delete title from current_place
+}
+
+function place() {
+    return $('#p').val();
+}
+
+function register_events() {
+  // on select change
+  $('#p').change(function(){
+    
+    var p = place();
+    var html = '';
+    var tasks = window.places[p].tasks;
+    for (var i in tasks) {
+      html += '<li><a href="#">' + tasks[i] + '</a></li>';
+    }
+    $('#t').html(html);
+  });
+}
+
+build_select();
+register_events();
+//alert('js ok');
+$('#p').change();
+
+// Save data to a the current session's store
+//	localStorage.setItem("username", "John");	 
+	// Access some stored data
+//	alert( "username = " + localStorage.getItem("username"));
+
+</script>
+
+
+</body>
+</html>
+
