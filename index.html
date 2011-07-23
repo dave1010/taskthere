@@ -41,9 +41,10 @@
 </fieldset>
 
 <h2>Tasks</h2>
-<input />
-<input type="button" value="Add" />
-
+<form>
+  <input id="new" />
+  <input type="submit" value="Add" onclick="return add_task()" />
+</form>
 
 <ul id="t">
 </ul>
@@ -80,6 +81,17 @@ var places = {
   }
 };
 
+function add_task() {
+  if (!place()) {
+    alert('Add a place before adding a task');
+    return;
+  }
+  places[place()].tasks.push($('#new').val());
+  $('#new').val('');
+  update();
+  return false;
+}
+
 function build_select() {
   // TODO: show task count and distance to current location
   // TODO: sort order: alphabetical or distance
@@ -102,29 +114,40 @@ function place() {
     return $('#p').val();
 }
 
+function delete_task(i) {
+  places[place()].tasks.splice(i);
+  update();
+}
+
 function register_events() {
-  // on select change
   $('#p').change(function(){
-    
     var p = place();
     var html = '';
     var tasks = window.places[p].tasks;
+    var a;
     for (var i in tasks) {
-      html += '<li><a href="#">' + tasks[i] + '</a></li>';
+      a = $('<p />');
+      a.text(tasks[i]);
+      html += '<li><a href="javascript:void(delete_task(' + i + '))">' + a.text() + '</a></li>';
     }
     $('#t').html(html);
   });
 }
 
+function update() {
+  localStorage.places = JSON.stringify(places);
+  $('#p').change();
+}
+
+function init() {
+  window.places = localStorage.places ? JSON.parse(localStorage.places) : {};
+}
+
+init();
 build_select();
 register_events();
+update();
 //alert('js ok');
-$('#p').change();
-
-// Save data to a the current session's store
-//	localStorage.setItem("username", "John");	 
-	// Access some stored data
-//	alert( "username = " + localStorage.getItem("username"));
 
 </script>
 
