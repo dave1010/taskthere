@@ -142,7 +142,7 @@ function place() {
 }
 
 function delete_task(i) {
-  places[place()].tasks.splice(i);
+  places[place()].tasks.splice(i, 1);
   update();
 }
 
