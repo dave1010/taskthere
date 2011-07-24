@@ -3,7 +3,11 @@
 <meta charset="utf-8">
 <title>To Do There</title>
 <style>
-body { font-family: sans; }
+html { height: 100%; }
+body { font-family: sans; margin: 0; padding: 0; position: relative; height: 100%;}
+h1 { font-size: 150%; font-weight: normal; background: #000; color: #fff; margin: 0; padding: 10px;}
+select { width: 100%; display: inline-block; }
+select, input, legend { font-size: 24px; }
 #t {
   margin: 0; padding: 0;
 }
@@ -16,21 +20,32 @@ body { font-family: sans; }
 #t li:nth-child(2n) {
   background: #ddd;
 }
+a { display: block; padding: 5px; text-decoration: none;}
+a:hover { color: red; }
+a:hover:after {
+  content: ' \2612';
+}
+#about {
+	color: #fff; background: #000; width: 100%;
+	position: absolute; bottom: -90px;-webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
+	-ms-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;
+}
+#about:hover {bottom: 0;}
 </style>
 </head>
 <body>
 
-<h1>To Do There</h1>
-
-<h2>Places</h2>
-
 <div id="place-selector">
 
-<select id="p">
-</select>
-
-<input type="button" onclick="start_edit_place();return false" value="Edit" />
-<input type="button" onclick="new_place();return false" value="New place" />
+<h1>
+  <table width="100%"><tr><td width="110">To Do @</td>
+  <td><select id="p"></select></td>
+  <td width="110"><input type="button" onclick="start_edit_place();return false" value="Edit" /></td>
+  </tr></table>
+</h1>
 
 </div>
 
@@ -43,7 +58,6 @@ body { font-family: sans; }
   <input type="button" value="Cancel" onclick="cancel_edit_place()" />
 </fieldset>
 
-<h2>Tasks</h2>
 <form>
   <input id="new" />
   <input type="submit" value="Add" onclick="return add_task()" />
@@ -52,6 +66,7 @@ body { font-family: sans; }
 <ul id="t">
 </ul>
 
+<div id="about">
 <h2>About</h2>
 
 <p>
@@ -61,6 +76,8 @@ places. Add new places then add tasks to them.
 <p>
 &copy; 2011 Dave Hulbert
 </p>
+
+</div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		
@@ -104,7 +121,7 @@ function save_edit_place() {
   cancel_edit_place();
 }
 
-function new_place() {
+function start_new_place() {
   alert('adding new place not implemented');
 }
 
@@ -126,6 +143,7 @@ function build_select() {
   for (var i in places) {
       options += '<option>' + places[i].name + '</option>';
   }
+  options += '<option value="" id="new-place-option">New place&hellip;</option>';
   $('#p').html(options);
 }
 
@@ -148,6 +166,10 @@ function delete_task(i) {
 
 function register_events() {
   $('#p').change(function(){
+    if ($('#p').val() == '') {
+      start_new_place();
+      return;
+    }
     var p = place();
     var html = '';
     var tasks = window.places[p].tasks;
