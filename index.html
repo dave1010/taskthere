@@ -4,10 +4,11 @@
 <title>To Do There</title>
 <style>
 html { height: 100%; }
-body { font-family: sans; margin: 0; padding: 0; position: relative; height: 100%;}
+body { font-family: sans; margin: 0; padding: 0; position: relative; height: 100%; }
 h1 { font-size: 150%; font-weight: normal; background: #000; color: #fff; margin: 0; padding: 10px;}
 select { width: 100%; display: inline-block; }
 select, input, legend { font-size: 24px; }
+#new { display: inline-block; width: 100%;}
 #t {
   margin: 0; padding: 0;
 }
@@ -27,11 +28,11 @@ a:hover:after {
 }
 #about {
 	color: #fff; background: #000; width: 100%;
-	position: absolute; bottom: -90px;-webkit-transition: all 1s ease-in-out;
+	/*position: absolute; bottom: -90px;-webkit-transition: all 1s ease-in-out;
 	-moz-transition: all 1s ease-in-out;
 	-o-transition: all 1s ease-in-out;
 	-ms-transition: all 1s ease-in-out;
-	transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;*/
 }
 #about:hover {bottom: 0;}
 </style>
@@ -41,7 +42,7 @@ a:hover:after {
 <div id="place-selector">
 
 <h1>
-  <table width="100%"><tr><td width="110">To Do @</td>
+  <table width="100%"><tr><td width="130">To Do @</td>
   <td><select id="p"></select></td>
   <td width="110"><input type="button" onclick="start_edit_place();return false" value="Edit" /></td>
   </tr></table>
@@ -59,8 +60,11 @@ a:hover:after {
 </fieldset>
 
 <form>
+  <table width="100%"><tr><td>
   <input id="new" />
+  </td><td width="110">
   <input type="submit" value="Add" onclick="return add_task()" />
+  </td></tr></table>
 </form>
 
 <ul id="t">
