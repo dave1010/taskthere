@@ -8,8 +8,9 @@ all: clean dist
 
 dist:
 	mkdir -p ${DIST_DIR}
+	cat $(SRC_DIR)/style.css | tr '\n' ' ' | tr '\t' ' ' | sed "s/ //g" > $(DIST_DIR)/style.min.css
 	cat $(SRC_DIR)/header.html \
-		$(SRC_DIR)/style.css \
+		$(DIST_DIR)/style.min.css \
 		$(SRC_DIR)/pre-body.html \
 		$(SRC_DIR)/body.html \
 		$(SRC_DIR)/script.js \
@@ -18,6 +19,7 @@ dist:
 	
 	sed -i "s/@VERSION/${VER_NUMBER}. Built $(DATE)/" $(DIST_DIR)/index.html
 	cp $(SRC_DIR)/favicon.ico $(DIST_DIR)/favicon.ico
+	rm $(DIST_DIR)/style.min.css
 	#echo ${VER_NUMBER}
 	echo Build complete
 

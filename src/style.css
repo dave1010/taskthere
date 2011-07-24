@@ -19,7 +19,7 @@ select, input, legend { font-size: 24px; }
 a { display: block; padding: 5px; text-decoration: none;}
 a:hover { color: red; }
 a:hover:after {
-  content: ' \2612';
+  content: '\a0 \2612';
 }
 #about {
 	color: #fff; background: #000; width: 100%;
