@@ -1,0 +1,47 @@
+<div id="place-selector">
+
+<h1>
+  <table width="100%"><tr><td width="130">To Do @</td>
+  <td><select id="p"></select></td>
+  <td width="110"><input type="button" onclick="start_edit_place();return false" value="Edit" /></td>
+  </tr></table>
+</h1>
+
+</div>
+
+<fieldset style="display:none" id="edit-place"">
+  <legend>Edit place</legend>
+  Name: <input id="place-name" value="" /><br />
+  Lat: <input id="place-lat" value="" /><br />
+  Long: <input id="place-lng" value="" /><br />
+  <input type="button" value="Save" onclick="save_edit_place()"/>
+  <input type="button" value="Cancel" onclick="cancel_edit_place()" />
+</fieldset>
+
+<form>
+  <table width="100%"><tr><td>
+  <input id="new" />
+  </td><td width="110">
+  <input type="submit" value="Add" onclick="return add_task()" />
+  </td></tr></table>
+</form>
+
+<ul id="t">
+</ul>
+
+<div id="about">
+<h2>About</h2>
+
+<p>
+<b>To Do There</b> lets you add tasks to certain 
+places. Add new places then add tasks to them.
+</p>
+<p>
+&copy; 2011 Dave Hulbert. Version @VERSION
+</p>
+
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script>
+

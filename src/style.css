@@ -1,0 +1,32 @@
+html { height: 100%; }
+body { font-family: sans; margin: 0; padding: 0; position: relative; height: 100%; }
+h1 { font-size: 150%; font-weight: normal; background: #000; color: #fff; margin: 0; padding: 10px;}
+select { width: 100%; display: inline-block; }
+select, input, legend { font-size: 24px; }
+#new { display: inline-block; width: 100%;}
+#t {
+  margin: 0; padding: 0;
+}
+#t li {
+  background: #eee;
+  list-style-type: none;
+  margin: 0
+  padding: 10px;
+}
+#t li:nth-child(2n) {
+  background: #ddd;
+}
+a { display: block; padding: 5px; text-decoration: none;}
+a:hover { color: red; }
+a:hover:after {
+  content: ' \2612';
+}
+#about {
+	color: #fff; background: #000; width: 100%;
+	/*position: absolute; bottom: -90px;-webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
+	-ms-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;*/
+}
+#about:hover {bottom: 0;}
