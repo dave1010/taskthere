@@ -1,6 +1,8 @@
-var current_place = 'Home';
-// TODO: add to localStorage
-// TODO: make OO
+// TODO: make OO & clean up lots
+
+// object hash of place objects
+// places are in the form {name: place_name,lat: 53,lng: -1,tasks: []}
+// tasks are just strings
 var places = {};
 
 function start_edit_place() {
@@ -23,6 +25,7 @@ function save_edit_place() {
   cancel_edit_place();
 }
 
+// start creating a new place
 function start_new_place() {
   var place_name = prompt('Place name: ');
   if (!place_name) {
@@ -56,6 +59,7 @@ function add_task() {
   return false;
 }
 
+// build the HTML for the places select menu
 function build_select() {
   // TODO: show task count and distance to current location
   // TODO: sort order: alphabetical or distance
@@ -67,6 +71,7 @@ function build_select() {
   $('#p').html(options);
 }
 
+// get the currently selected place
 function place() {
     return $('#p').val();
 }
@@ -76,6 +81,7 @@ function delete_task(i) {
   update();
 }
 
+// make so changing the place updates the tasks
 function register_events() {
   $('#p').change(function(){
     if ($('#p').val() == '') {
@@ -96,11 +102,13 @@ function register_events() {
   });
 }
 
+// save the tasks/places & trigger a rebuild of the task list
 function update() {
   localStorage.places = JSON.stringify(places);
   $('#p').change();
 }
 
+// restore from last session if it exists
 function init() {
   window.places = localStorage.places ? JSON.parse(localStorage.places) : {};
 }
