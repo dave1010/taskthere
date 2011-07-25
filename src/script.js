@@ -1,20 +1,7 @@
 var current_place = 'Home';
 // TODO: add to localStorage
 // TODO: make OO
-var places = {
-  Home: {
-    name: 'Home',
-    lat: 52,
-    lng: -1,
-    tasks: ['Make a todo program', 'Tidy']
-  },
-  Work: {
-    name: 'Work',
-    lat: 53,
-    lng: -1,
-    tasks: ['Do some work', 'Code']
-  }
-};
+var places = {};
 
 function start_edit_place() {
   $('#edit-place').show();
@@ -37,7 +24,25 @@ function save_edit_place() {
 }
 
 function start_new_place() {
-  alert('adding new place not implemented');
+  var place_name = prompt('Place name: ');
+  if (!place_name) {
+    alert('Please enter a place name');
+    return;
+  }
+  if (places[place_name]) {
+    alert(place_name + ' already exists');
+  }
+  places[place_name] = {
+    name: place_name,
+    lat: 53,
+    lng: -1,
+    tasks: []
+  };
+
+  localStorage.places = JSON.stringify(places);
+  build_select();
+  $('#p').val(place_name);
+  update();
 }
 
 function add_task() {
@@ -60,14 +65,6 @@ function build_select() {
   }
   options += '<option value="" id="new-place-option">New place&hellip;</option>';
   $('#p').html(options);
-}
-
-function place_change(el) {
-  //window.current_place = 'Home";  
-}
-
-function delete_task(title) {
-  // delete title from current_place
 }
 
 function place() {
@@ -95,6 +92,7 @@ function register_events() {
       html += '<li><a href="javascript:void(delete_task(' + i + '))">' + a.text() + '</a></li>';
     }
     $('#t').html(html);
+    $('#new').focus();
   });
 }
 
