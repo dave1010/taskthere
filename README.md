@@ -15,13 +15,14 @@ A simple location-based to do list manager. Currently in development; not suitab
 
 ## To Do
 
+* HTML5 application cache
 * Allow adding places
 * Allow editing and deleting places
 * Automatically switch places based on geolocation
 * Controls for geolocation (toggle, update interval)
 * Show geolocation info
 * Remove jQuery dependency
-* Package as W3C widget
+* Package as W3C widget (`make widget`)
 
 ## Ideas
 
@@ -50,7 +51,7 @@ A simple location-based to do list manager. Currently in development; not suitab
 
 ## About
 
-Dveloped partly on a Nokia N900, using the `python -m SimpleHTTPServer` for testing.
+Developed partly on a Nokia N900, using the `python -m SimpleHTTPServer` for testing.
 
 Type `make` to build.
 
