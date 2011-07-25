@@ -3,42 +3,9 @@
 <meta charset="utf-8">
 <title>To Do There</title>
 <style>
-html { height: 100%; }
-body { font-family: sans; margin: 0; padding: 0; position: relative; height: 100%; }
-h1 { font-size: 150%; font-weight: normal; background: #000; color: #fff; margin: 0; padding: 10px;}
-select { width: 100%; display: inline-block; }
-select, input, legend { font-size: 24px; }
-#new { display: inline-block; width: 100%;}
-#t {
-  margin: 0; padding: 0;
-}
-#t li {
-  background: #eee;
-  list-style-type: none;
-  margin: 0
-  padding: 10px;
-}
-#t li:nth-child(2n) {
-  background: #ddd;
-}
-a { display: block; padding: 5px; text-decoration: none;}
-a:hover { color: red; }
-a:hover:after {
-  content: ' \2612';
-}
-#about {
-	color: #fff; background: #000; width: 100%;
-	/*position: absolute; bottom: -90px;-webkit-transition: all 1s ease-in-out;
-	-moz-transition: all 1s ease-in-out;
-	-o-transition: all 1s ease-in-out;
-	-ms-transition: all 1s ease-in-out;
-	transition: all 1s ease-in-out;*/
-}
-#about:hover {bottom: 0;}
-</style>
+html{height:100%;}body{font-family:sans;margin:0;padding:0;position:relative;height:100%;}h1{font-size:150%;font-weight:normal;background:#000;color:#fff;margin:0;padding:10px;}select{width:100%;display:inline-block;}select,input,legend{font-size:24px;}#new{display:inline-block;width:100%;}#t{margin:0;padding:0;}#tli{background:#eee;list-style-type:none;margin:0padding:10px;}#tli:nth-child(2n){background:#ddd;}a{display:block;padding:5px;text-decoration:none;}a:hover{color:red;}a:hover:after{content:'\a0\2612';}#about{color:#fff;background:#000;width:100%;/*position:absolute;bottom:-90px;-webkit-transition:all1sease-in-out;-moz-transition:all1sease-in-out;-o-transition:all1sease-in-out;-ms-transition:all1sease-in-out;transition:all1sease-in-out;*/}#about:hover{bottom:0;}</style>
 </head>
 <body>
-
 <div id="place-selector">
 
 <h1>
@@ -57,6 +24,7 @@ a:hover:after {
   Long: <input id="place-lng" value="" /><br />
   <input type="button" value="Save" onclick="save_edit_place()"/>
   <input type="button" value="Cancel" onclick="cancel_edit_place()" />
+  <input type="button" value="Delete" onclick="delete_edit_place()" />
 </fieldset>
 
 <form>
@@ -78,32 +46,18 @@ a:hover:after {
 places. Add new places then add tasks to them.
 </p>
 <p>
-&copy; 2011 Dave Hulbert
+&copy; 2011 Dave Hulbert. Version 0.1. Built Mon Jul 25 12:56:15 2011 +0100
 </p>
 
 </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-		
 <script>
 
 var current_place = 'Home';
 // TODO: add to localStorage
 // TODO: make OO
-var places = {
-  Home: {
-    name: 'Home',
-    lat: 52,
-    lng: -1,
-    tasks: ['Make a todo program', 'Tidy']
-  },
-  Work: {
-    name: 'Work',
-    lat: 53,
-    lng: -1,
-    tasks: ['Do some work', 'Code']
-  }
-};
+var places = {};
 
 function start_edit_place() {
   $('#edit-place').show();
@@ -126,7 +80,25 @@ function save_edit_place() {
 }
 
 function start_new_place() {
-  alert('adding new place not implemented');
+  var place_name = prompt('Place name: ');
+  if (!place_name) {
+    alert('Please enter a place name');
+    return;
+  }
+  if (places[place_name]) {
+    alert(place_name + ' already exists');
+  }
+  places[place_name] = {
+    name: place_name,
+    lat: 53,
+    lng: -1,
+    tasks: []
+  };
+
+  localStorage.places = JSON.stringify(places);
+  build_select();
+  $('#p').val(place_name);
+  update();
 }
 
 function add_task() {
@@ -149,14 +121,6 @@ function build_select() {
   }
   options += '<option value="" id="new-place-option">New place&hellip;</option>';
   $('#p').html(options);
-}
-
-function place_change(el) {
-  //window.current_place = 'Home";  
-}
-
-function delete_task(title) {
-  // delete title from current_place
 }
 
 function place() {
@@ -184,6 +148,7 @@ function register_events() {
       html += '<li><a href="javascript:void(delete_task(' + i + '))">' + a.text() + '</a></li>';
     }
     $('#t').html(html);
+    $('#new').focus();
   });
 }
 
@@ -201,10 +166,7 @@ build_select();
 register_events();
 update();
 //alert('js ok');
-
 </script>
-
-
 </body>
 </html>
 
