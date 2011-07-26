@@ -3,7 +3,7 @@
 <h1>
   <table width="100%"><tr><td width="130">To Do @</td>
   <td><select id="p"></select></td>
-  <td width="110"><input type="button" onclick="placeManager.startEditPlace();return false" value="Edit" /></td>
+  <td width="110"><input type="button" onclick="on.startEditPlace();return false" value="Edit" /></td>
   </tr></table>
 </h1>
 
@@ -14,9 +14,9 @@
   Name: <input id="place-name" value="" /><br />
   Lat: <input id="place-lat" value="" /><br />
   Long: <input id="place-lng" value="" /><br />
-  <input type="button" value="Save" onclick="placeManager.saveEditPlace()"/>
-  <input type="button" value="Cancel" onclick="placeManager.cancelEditPlace()" />
-  <input type="button" value="Delete" onclick="placeManager.deleteEditPlace()" />
+  <input type="button" value="Save" onclick="on.saveEditPlace()"/>
+  <input type="button" value="Cancel" onclick="on.cancelEditPlace()" />
+  <input type="button" value="Delete" onclick="on.deleteEditPlace()" />
 </fieldset>
 
 <form>
@@ -34,11 +34,12 @@
 <h2>About</h2>
 
 <p>
-<b>To Do There</b> lets you add tasks to certain 
-places. Add new places then add tasks to them.
+  <b>To Do There</b> lets you add tasks to certain 
+  places. Add new places then add tasks to them.
 </p>
+
 <p>
-&copy; 2011 Dave Hulbert. Version @VERSION
+  &copy; 2011 Dave Hulbert. Version @VERSION
 </p>
 
 </div>
