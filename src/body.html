@@ -1,9 +1,12 @@
 <div id="place-selector">
 
 <h1>
-  <table width="100%"><tr><td width="130">To Do @</td>
+  <table width="100%"><tr><td width="110">To Do @</td>
   <td><select id="p"></select></td>
-  <td width="110"><input type="button" onclick="on.startEditPlace();return false" value="Edit" /></td>
+  <td width="150">
+  	<input type="button" onclick="on.startEditPlace();return false" value="Edit" />
+  	<label>GPS<input type="checkbox" /></label>
+  </td>
   </tr></table>
 </h1>
 
@@ -14,6 +17,7 @@
   Name: <input id="place-name" value="" /><br />
   Lat: <input id="place-lat" value="" /><br />
   Long: <input id="place-lng" value="" /><br />
+  <input type="button" value="Here" onclick="on.hereEditPlace()"/>
   <input type="button" value="Save" onclick="on.saveEditPlace()"/>
   <input type="button" value="Cancel" onclick="on.cancelEditPlace()" />
   <input type="button" value="Delete" onclick="on.deleteEditPlace()" />
@@ -21,7 +25,7 @@
 
 <form>
   <table width="100%"><tr><td>
-  <input id="new" />
+  <input id="new" placeholder="Enter task&hellip;" />
   </td><td width="110">
   <input type="submit" value="Add" onclick="return on.addTask()" />
   </td></tr></table>
@@ -31,11 +35,12 @@
 </ul>
 
 <div id="about">
-<h2>About</h2>
 
 <p>
-  <b>To Do There</b> lets you add tasks to certain 
-  places. Add new places then add tasks to them.
+  <b>To Do There</b> lets save places then add tasks to them. 
+  Select <em>New place&hellip;</em> from the menu to create a new place.
+  Enter tasks into the text box; click on them in the list to delete them.
+  Toggle updating GPS with the GPS checkbox.
 </p>
 
 <p>

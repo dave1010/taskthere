@@ -58,8 +58,17 @@ var placeManager = {
 		};
 
 		var tasks = [];
+		var place = new Place(opts, tasks);
+		
+		navigator.geolocation.getCurrentPosition(function(position) {
+			opts.lat = position.coords.latitude;
+			opts.lng = position.coords.longitude;
+			place.save(opts);
+		}, function(error) {
+			alert(error.message);	
+		});
 
-		placeManager.places.push(new Place(opts, tasks));
+		placeManager.places.push(place);
 		placeManager.saveToStorage();
 		placeManager.buildSelect();
 		elements.placeSelect.val(place_name);
@@ -158,6 +167,10 @@ var on = {
 		//elements.placeSelect.val(opts.name);
 		placeManager.update();
 		on.cancelEditPlace();
+	},
+	hereEditPlace: function() {
+		// set the current place the current geolocation
+		// then close & save the edit, or just set the input fields
 	}
 };
 

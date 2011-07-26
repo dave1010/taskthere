@@ -11,15 +11,15 @@ A simple location-based to do list manager. Currently in development; not suitab
 * See a list of tasks associated with a place
 * Add/delete tasks
 * Add/edit/delete places
+* Places are stored with the current geolocation
 * Fast
 
 ## To Do
 
-* HTML5 application cache
-* Add geolocation to places
+* HTML5 application cache manifest (make it offline)
 * Automatically switch places based on geolocation
 * Controls for geolocation (toggle, update interval)
-* Show geolocation info
+* Show geolocation info (maybe on hover)
 * Remove jQuery dependency
 * Package as W3C widget (`make widget`)
 
