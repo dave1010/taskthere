@@ -26,11 +26,17 @@ var placeManager = {
 		localStorage.places = JSON.stringify(placeManager.places); 
 	},
 	restoreFromStorage: function() {
-		// TODO: make into Place objects
 		// restore from last session if it exists
 		var places = localStorage.places ? JSON.parse(localStorage.places) : [];
+		var tasks_array, tasks;
 		for (var i in places) {
-			placeManager.places.push(new Place(places[i]);
+			tasks_array = places[i].tasks;
+			tasks = [];
+			places[i].tasks = [];
+			for (var j in tasks_array) {
+					tasks.push(new Task(tasks_array[j].title));
+			}
+			placeManager.places.push(new Place(places[i], tasks));
 		}
 	},
 	startEditPlace: function() {
@@ -60,9 +66,11 @@ var placeManager = {
 		// TODO: chgeck if place exists
 		var opts = {
 			name: place_name,
-			lat = 53,
-			lng = -1,
-		}
+			lat: 53,
+			lng: -1,
+		};
+
+		var tasks = [];
 
 		placeManager.places.push(new Place(opts, tasks));
 		placeManager.saveToStorage();
@@ -70,12 +78,12 @@ var placeManager = {
 		elements.placeSelect.val(place_name);
 		placeManager.update();
 	},
-	addTask: function(details) {
-		if (!placeManager.getCurrentName()) {
+	addTask: function(title) {
+		if (!placeManager.getCurrentPlaceName()) {
 			alert('Add a place before adding a task');
 			return;
 		}
-		var t = new Task(details);
+		var t = new Task(title);
 		var p = placeManager.getCurrent();
 		p.addTask(t);
 		placeManager.update();
@@ -93,10 +101,6 @@ var placeManager = {
 		options += '<option value="" id="new-place-option">New place&hellip;</option>';
 		elements.placeSelect.html(options);
 	},
-	deleteTask: function() {
-		places[current_place_name()].tasks.splice(i, 1);
-		update();
-	},
 	registerEvents: function() {
 		elements.placeSelect.change(on.placeSelectChange);
 	},
@@ -109,6 +113,10 @@ var placeManager = {
 var on = {
 	addTask: function() {
 		var details = $('#new').val();
+		if (!details) {
+			alert('Enter details for task');
+			return false;
+		}
 		placeManager.addTask(details);
 		$('#new').val('');
 		return false;	
@@ -149,6 +157,15 @@ Place.prototype.save = function() {
 Place.prototype.delete = function() {
 };
 
+Place.prototype.deleteTask = function(task) {
+	for (var i in this.tasks) {
+		if (this.tasks[i].title === task.title) {
+			this.tasks.splice(i, 1);
+			return;
+		}
+	}
+};
+
 Place.prototype.select = function() {
 	var html = '';
 	var tasks = this.tasks;
@@ -177,17 +194,20 @@ function Task(title) {
 
 Task.prototype.getHtml = function() {
 	var me = this;	
-	return $('<a />')
-		.text(this.title)
+	var html = $('<a href="javascript:void(0)"> </a>')
+		.text(this.title || 'No title')
+		.wrap('<li />')
+		.parent()
 		.click(function() {
 			me.delete();
-		})
-		.wrap('<li />');
+		});
+	return html;
 };
 
 Task.prototype.delete = function() {
-	alert('deleting task ' + this.name);
 	// TODO: delete task
+	placeManager.getCurrent().deleteTask(this);
+	placeManager.update();
 };
 
 placeManager.restoreFromStorage();
