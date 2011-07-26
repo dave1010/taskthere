@@ -3,15 +3,19 @@
 <meta charset="utf-8">
 <title>To Do There</title>
 <style>
-html{height:100%;}body{font-family:sans;margin:0;padding:0;position:relative;height:100%;}h1{font-size:150%;font-weight:normal;background:#000;color:#fff;margin:0;padding:10px;}select{width:100%;display:inline-block;}select,input,legend{font-size:24px;}#new{display:inline-block;width:100%;}#t{margin:0;padding:0;}#tli{background:#eee;list-style-type:none;margin:0padding:10px;}#tli:nth-child(2n){background:#ddd;}a{display:block;padding:5px;text-decoration:none;}a:hover{color:red;}a:hover:after{content:'\a0\2612';}#about{color:#fff;background:#000;width:100%;/*position:absolute;bottom:-90px;-webkit-transition:all1sease-in-out;-moz-transition:all1sease-in-out;-o-transition:all1sease-in-out;-ms-transition:all1sease-in-out;transition:all1sease-in-out;*/}#about:hover{bottom:0;}</style>
+html { height: 100%; } body { font-family: sans; margin: 0; padding: 0; position: relative; height: 100%; } h1 { font-size: 150%; font-weight: normal; background: #000; color: #fff; margin: 0; padding: 10px;} select { width: 100%; display: inline-block; } select, input, legend { font-size: 24px; } #new { display: inline-block; width: 100%;} #t { margin: 0; padding: 0; } #t li { background: #eee; list-style-type: none; margin: 0 padding: 10px; } #t li:nth-child(2n) { background: #ddd; } a { display: block; padding: 5px; text-decoration: none;} a:hover { color: red; } a:hover:after { content: '\a0 \2612'; } #about {color: #fff; background: #000; width: 100%;/*position: absolute; bottom: -90px;-webkit-transition: all 1s ease-in-out;-moz-transition: all 1s ease-in-out;-o-transition: all 1s ease-in-out;-ms-transition: all 1s ease-in-out;transition: all 1s ease-in-out;*/ } #about:hover {bottom: 0;} </style>
 </head>
 <body>
 <div id="place-selector">
 
 <h1>
-  <table width="100%"><tr><td width="130">To Do @</td>
+  <table width="100%"><tr><td width="110">To Do @</td>
   <td><select id="p"></select></td>
-  <td width="110"><input type="button" onclick="start_edit_place();return false" value="Edit" /></td>
+
+  <td width="150">
+  	<input type="button" onclick="on.startEditPlace();return false" value="Edit" />
+  	<label>GPS<input type="checkbox" /></label>
+  </td>
   </tr></table>
 </h1>
 
@@ -19,19 +23,22 @@ html{height:100%;}body{font-family:sans;margin:0;padding:0;position:relative;hei
 
 <fieldset style="display:none" id="edit-place"">
   <legend>Edit place</legend>
+
   Name: <input id="place-name" value="" /><br />
   Lat: <input id="place-lat" value="" /><br />
   Long: <input id="place-lng" value="" /><br />
-  <input type="button" value="Save" onclick="save_edit_place()"/>
-  <input type="button" value="Cancel" onclick="cancel_edit_place()" />
-  <input type="button" value="Delete" onclick="delete_edit_place()" />
+  <input type="button" value="Here" onclick="on.hereEditPlace()"/>
+  <input type="button" value="Save" onclick="on.saveEditPlace()"/>
+  <input type="button" value="Cancel" onclick="on.cancelEditPlace()" />
+  <input type="button" value="Delete" onclick="on.deleteEditPlace()" />
+
 </fieldset>
 
 <form>
   <table width="100%"><tr><td>
-  <input id="new" />
+  <input id="new" placeholder="Enter task&hellip;" />
   </td><td width="110">
-  <input type="submit" value="Add" onclick="return add_task()" />
+  <input type="submit" value="Add" onclick="return on.addTask()" />
   </td></tr></table>
 </form>
 
@@ -39,14 +46,17 @@ html{height:100%;}body{font-family:sans;margin:0;padding:0;position:relative;hei
 </ul>
 
 <div id="about">
-<h2>About</h2>
 
 <p>
-<b>To Do There</b> lets you add tasks to certain 
-places. Add new places then add tasks to them.
+  <b>To Do There</b> lets save places then add tasks to them. 
+  Select <em>New place&hellip;</em> from the menu to create a new place.
+  Enter tasks into the text box; click on them in the list to delete them.
+  Toggle updating GPS with the GPS checkbox.
 </p>
+
 <p>
-&copy; 2011 Dave Hulbert. Version 0.1. Built Mon Jul 25 12:56:15 2011 +0100
+  &copy; 2011 Dave Hulbert. Version 0.4. Built Tue Jul 26 22:21:46 2011 +0100
+
 </p>
 
 </div>
@@ -54,119 +64,272 @@ places. Add new places then add tasks to them.
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script>
 
-var current_place = 'Home';
-// TODO: add to localStorage
-// TODO: make OO
-var places = {};
 
-function start_edit_place() {
-  $('#edit-place').show();
-  $('#place-selector').hide();
+var elements = {
+	placeSelect: $('#p'),
+	taskContainer: $('#t'),
+	taskInput: $('#new') 
+};
 
-  var p = places[place()];
-  $('#place-name').val(p.name);
-  $('#place-lat').val(p.lat);
-  $('#place-lng').val(p.lng);
+var placeManager = {
+	getCurrentPlaceName: function() {
+		return elements.placeSelect.val();
+	},
+	getCurrent: function() {
+		var n = placeManager.getCurrentPlaceName();
+		for (var i in placeManager.places) {
+			if (placeManager.places[i].name == n) {
+				return placeManager.places[i];
+			}
+		}
+		throw 'No current place';
+	},
+	update: function() {
+		// save the tasks/places & trigger a rebuild of the task list
+		placeManager.saveToStorage();
+		elements.placeSelect.change();
+	},
+	saveToStorage: function() {
+		localStorage.places = JSON.stringify(placeManager.places); 
+	},
+	taskArrayToObjects: function(tasks_array) {
+		var tasks = [];
+		for (var i in tasks_array) {
+				tasks.push(new Task(tasks_array[i].title));
+		}		
+		return tasks;
+	},
+	restoreFromStorage: function() {
+		// restore from last session if it exists
+		var places = localStorage.places ? JSON.parse(localStorage.places) : [];
+		var tasks;
+		for (var i in places) {
+			tasks = placeManager.taskArrayToObjects(places[i].tasks);
+			placeManager.places.push(new Place(places[i], tasks));
+		}
+	},
+	startNewPlace: function() {
+		var place_name = prompt('Enter new place name: ');
+		if (!place_name) {
+			alert('Please enter a place name');
+			return;
+		}
+
+		// TODO: check if place exists
+		// TODO: geolocation
+		var opts = {
+			name: place_name,
+			lat: 0,
+			lng: 0,
+		};
+
+		var tasks = [];
+		var place = new Place(opts, tasks);
+		
+		navigator.geolocation.getCurrentPosition(function(position) {
+			opts.lat = position.coords.latitude;
+			opts.lng = position.coords.longitude;
+			place.save(opts);
+		}, function(error) {
+			alert(error.message);	
+		});
+
+		placeManager.places.push(place);
+		placeManager.saveToStorage();
+		placeManager.buildSelect();
+		elements.placeSelect.val(place_name);
+		placeManager.update();
+	},
+	deletePlace: function(place) {
+		for (var i in placeManager.places) {
+			if (placeManager.places[i].name === place.name) {
+				// this will delete the 1st place with the same name
+				placeManager.places.splice(i, 1);
+				return;
+			}
+		}
+	},
+	buildSelect: function() {
+		// TODO: show task count and distance to current location
+		// TODO: sort order: alphabetical or distance
+		var options = '';
+		var place;
+		for (var i in placeManager.places) {
+			place = placeManager.places[i];
+			options += place.getOptionHtml();
+		}
+		options += '<option value="" id="new-place-option">New place&hellip;</option>';
+		elements.placeSelect.html(options);
+	},
+	registerEvents: function() {
+		elements.placeSelect.change(on.placeSelectChange);
+	},
+	// array of place objects
+	places: []
+};
+
+// event handlers
+var on = {
+	addTask: function() {
+		var title = $('#new').val();
+		if (!title) {
+			alert('Enter details for task');
+			return false;
+		}
+		if (!placeManager.getCurrentPlaceName()) {
+			alert('Add a place before adding a task');
+			return false;
+		}
+		var t = new Task(title);
+		var p = placeManager.getCurrent();
+		p.addTask(t);
+		placeManager.update();
+		$('#new').val('');
+		return false;	
+	},
+	placeSelectChange: function() {
+		if (elements.placeSelect.val() == '') {
+			placeManager.startNewPlace();
+			return;
+		}
+		var p = placeManager.getCurrent();
+		p.select();
+		elements.taskInput.focus();
+	},
+	startEditPlace: function() {
+		$('#edit-place').show();
+		$('#place-selector').hide();
+
+		var p = placeManager.getCurrent();
+		$('#place-name').val(p.name);
+		$('#place-lat').val(p.lat);
+		$('#place-lng').val(p.lng);
+	},
+	cancelEditPlace: function() {
+		$('#edit-place').hide();
+		$('#place-selector').show();
+	},
+	saveEditPlace: function() {
+		var opts = {
+			name: $('#place-name').val(),
+			lat: $('#place-lat').val(),
+			lng: $('#place-lng').val()
+		};
+		placeManager.getCurrent().save(opts);
+		placeManager.saveToStorage();
+		placeManager.buildSelect();
+		elements.placeSelect.val(opts.name);
+		placeManager.update();
+		on.cancelEditPlace();
+	},
+	deleteEditPlace: function() {
+		if (!confirm("Are you sure you want to delete this place and all it's tasks?")) {
+			on.cancelEditPlace();
+			return;
+		}
+		placeManager.deletePlace(placeManager.getCurrent());
+		placeManager.saveToStorage();
+		placeManager.buildSelect();
+		//elements.placeSelect.val(opts.name);
+		placeManager.update();
+		on.cancelEditPlace();
+	},
+	hereEditPlace: function() {
+		// set the current place the current geolocation
+		// then close & save the edit, or just set the input fields
+	}
+};
+
+
+function Place(opts, tasks) {
+	this.name = opts.name;
+	this.lat = opts.lat;
+	this.lng = opts.lng;
+	this.tasks = tasks || [];
 }
 
-function cancel_edit_place() {
-  $('#edit-place').hide();
-  $('#place-selector').show();
+Place.prototype.addTask = function(task) {
+	this.tasks.push(task);
 }
 
-function save_edit_place() {
-  alert('not implemented');
-  cancel_edit_place();
+
+Place.prototype.add = function() {
+};
+
+Place.prototype.startEdit = function() {
+};
+
+Place.prototype.save = function(opts) {
+	this.name = opts.name;
+	this.lat = opts.lat;
+	this.lng = opts.lng;
+};
+
+Place.prototype.delete = function() {
+};
+
+Place.prototype.deleteTask = function(task) {
+	for (var i in this.tasks) {
+		if (this.tasks[i].title === task.title) {
+			this.tasks.splice(i, 1);
+			return;
+		}
+	}
+};
+
+Place.prototype.select = function() {
+	var html = '';
+	var tasks = this.tasks;
+	var a, task;
+	elements.taskContainer.html('');	
+	for (var i in tasks) {
+		task = tasks[i];
+		elements.taskContainer.append(task.getHtml());
+	}
+};
+
+Place.prototype.getOptionHtml = function() {
+	// TODO: escape chars
+	return '<option>' + this.name + '</option>';
+};
+
+Place.prototype.addTask = function(task) {
+	this.tasks.push(task);
+};
+
+
+
+function Task(title) {
+	this.title = title;
 }
 
-function start_new_place() {
-  var place_name = prompt('Place name: ');
-  if (!place_name) {
-    alert('Please enter a place name');
-    return;
-  }
-  if (places[place_name]) {
-    alert(place_name + ' already exists');
-  }
-  places[place_name] = {
-    name: place_name,
-    lat: 53,
-    lng: -1,
-    tasks: []
-  };
+Task.prototype.getHtml = function() {
+	var me = this;	
+	var html = $('<a href="javascript:void(0)"> </a>')
+		.text(this.title || 'No title')
+		.wrap('<li />').parent()
+		.click(function() {
+			me.delete();
+		});
+	return html;
+};
 
-  localStorage.places = JSON.stringify(places);
-  build_select();
-  $('#p').val(place_name);
-  update();
+Task.prototype.delete = function() {
+	placeManager.getCurrent().deleteTask(this);
+	placeManager.update();
+};
+
+function load_page() {
+	placeManager.restoreFromStorage();
+	placeManager.buildSelect();
+	placeManager.registerEvents();
+	placeManager.update();
 }
 
-function add_task() {
-  if (!place()) {
-    alert('Add a place before adding a task');
-    return;
-  }
-  places[place()].tasks.push($('#new').val());
-  $('#new').val('');
-  update();
-  return false;
-}
-
-function build_select() {
-  // TODO: show task count and distance to current location
-  // TODO: sort order: alphabetical or distance
-  var options = '';
-  for (var i in places) {
-      options += '<option>' + places[i].name + '</option>';
-  }
-  options += '<option value="" id="new-place-option">New place&hellip;</option>';
-  $('#p').html(options);
-}
-
-function place() {
-    return $('#p').val();
-}
-
-function delete_task(i) {
-  places[place()].tasks.splice(i, 1);
-  update();
-}
-
-function register_events() {
-  $('#p').change(function(){
-    if ($('#p').val() == '') {
-      start_new_place();
-      return;
-    }
-    var p = place();
-    var html = '';
-    var tasks = window.places[p].tasks;
-    var a;
-    for (var i in tasks) {
-      a = $('<p />');
-      a.text(tasks[i]);
-      html += '<li><a href="javascript:void(delete_task(' + i + '))">' + a.text() + '</a></li>';
-    }
-    $('#t').html(html);
-    $('#new').focus();
-  });
-}
-
-function update() {
-  localStorage.places = JSON.stringify(places);
-  $('#p').change();
-}
-
-function init() {
-  window.places = localStorage.places ? JSON.parse(localStorage.places) : {};
-}
-
-init();
-build_select();
-register_events();
-update();
+load_page();
 //alert('js ok');
 </script>
 </body>
 </html>
+
 
