@@ -4,16 +4,20 @@ DIST_DIR = dist
 VER_NUMBER = $(shell cat version.txt)
 DATE=$(shell git log -1 --pretty=format:%ad)
 VERSION = sed -i "s/@VERSION/${VER_NUMBER}. Built $(DATE)/" $(DIST_DIR)/index.html
+
 all: clean dist
 
 dist: prepare minify
 	@@echo Dist:
 	@@echo - Concatting source
+	@@# this is messy - there has to be a cleaner way with make
 	@@cat $(SRC_DIR)/header.html \
 		$(DIST_DIR)/style.min.css \
 		$(SRC_DIR)/pre-body.html \
 		$(SRC_DIR)/body.html \
-		$(SRC_DIR)/script.js \
+		$(SRC_DIR)/js/Place.js \
+		$(SRC_DIR)/js/Task.js \
+		$(SRC_DIR)/js/script.js \
 		$(SRC_DIR)/footer.html \
 		> $(DIST_DIR)/index.html
 	
