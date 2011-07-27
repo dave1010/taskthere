@@ -2,6 +2,8 @@
 
 A simple location-based to do list manager. Currently in development; not suitable for everyday use.
 
+Demo: http://dave1010.github.com/to-do-there/
+
 © 2011 David Hulbert. MIT license. No warranty.
 
 ## Features
