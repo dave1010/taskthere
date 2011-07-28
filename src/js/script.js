@@ -2,7 +2,8 @@
 var elements = {
 	placeSelect: $('#p'),
 	taskContainer: $('#t'),
-	taskInput: $('#new') 
+	taskInput: $('#new'),
+	gps: $('#gps') 
 };
 
 var placeManager = {
