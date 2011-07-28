@@ -42,6 +42,14 @@ var placeManager = {
 			placeManager.places.push(new Place(places[i], tasks));
 		}
 	},
+	placeNameExists: function(place_name) {
+		for (var i in placeManager.places) {
+			if (placeManager.places[i].name === place_name) {
+				return true;
+			}
+		}
+		return false;
+	},
 	startNewPlace: function() {
 		var place_name = prompt('Enter new place name: ');
 		if (!place_name) {
@@ -49,8 +57,11 @@ var placeManager = {
 			return;
 		}
 
-		// TODO: check if place exists
-		// TODO: geolocation
+		if (placeManager.placeNameExists(place_name)) {
+			alert('Place "' + place_name + '" already exists.');
+			return;
+		}
+		
 		var opts = {
 			name: place_name,
 			lat: 0,
