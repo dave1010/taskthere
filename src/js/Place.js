@@ -47,7 +47,7 @@ Place.prototype.select = function() {
 };
 
 Place.prototype.getOptionHtml = function() {
-	// TODO: escape chars
+	var escaped = this.name.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
 	return '<option>' + this.name + '</option>';
 };
 
