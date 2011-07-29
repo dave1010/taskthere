@@ -1,4 +1,10 @@
 
+if (!window.console) {
+	window.console = {
+		log: function() {}
+	};
+}
+
 var elements = {
 	placeSelect: $('#p'),
 	taskContainer: $('#t'),
@@ -111,7 +117,33 @@ var placeManager = {
 		elements.placeSelect.change(on.placeSelectChange);
 	},
 	// array of place objects
-	places: []
+	places: [],
+	gpsSuccess: function(position) {
+		placeManager.selectNearestPlace(position);
+	},
+	selectNearestPlace: function(position) {
+		var nearestPlace;
+		var closestDistance = 6371 * 2; // assume we're the other side of the earth
+		for (var i in placeManager.places) {
+			var dist = placeManager.places[i].distanceTo(position);
+			console.log(dist);
+			if (dist < closestDistance) {
+				console.log('nearest!');
+				nearestPlace = placeManager.places[i];
+			}
+		}
+
+		if (nearestPlace) {
+			if (nearestPlace.name !== placeManager.getCurrent().name) {
+				console.log('changing place to ' + nearestPlace.name + ', which is ' + dist + 'km away');
+
+				elements.placeSelect.val(nearestPlace.name);
+				placeManager.update();
+				
+			}
+		}
+	},
+	gpsChecker: new GpsChecker()
 };
 
 // event handlers

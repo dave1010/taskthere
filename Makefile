@@ -15,7 +15,7 @@ dist: prepare minify
 		$(DIST_DIR)/style.min.css \
 		$(SRC_DIR)/pre-body.html \
 		$(SRC_DIR)/body.html \
-		$(SRC_DIR)/js/Gps.js \
+		$(SRC_DIR)/js/GpsChecker.js \
 		$(SRC_DIR)/js/Place.js \
 		$(SRC_DIR)/js/Task.js \
 		$(SRC_DIR)/js/script.js \

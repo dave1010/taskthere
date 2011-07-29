@@ -55,4 +55,20 @@ Place.prototype.addTask = function(task) {
 	this.tasks.push(task);
 };
 
+Place.prototype.distanceTo = function(position) {
+	console.log(position.lat, position.lng);
+	console.log(this.lat, this.lng);
 
+	function toRad(deg) {
+		return deg *(Math.PI/180);
+	}
+
+	var R = 6371; // km
+	var d = Math.acos(
+				Math.sin(toRad(position.lat)) * Math.sin(toRad(this.lat)) + 
+	            Math.cos(toRad(position.lat)) * Math.cos(toRad(this.lat)) *
+	            Math.cos(toRad(this.lng) - toRad(position.lng))
+	        ) * R;
+	console.log(d);
+	return d;
+};
