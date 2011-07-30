@@ -1,6 +1,6 @@
 # To Do There
 
-A simple location-based to do list manager. Currently in development; not suitable for everyday use.
+A simple location-based to do list manager. Currently beta quality.
 
 Demo: http://dave1010.github.com/to-do-there/
 
@@ -14,25 +14,26 @@ Demo: http://dave1010.github.com/to-do-there/
 * Add/delete tasks
 * Add/edit/delete places
 * Places are stored with the current geolocation
+* Automatically switch places based on geolocation
+* Controls for geolocation (toggle)
 * Fast
 
 ## To Do
 
 * HTML5 application cache manifest (make it offline)
-* Automatically switch places based on geolocation
-* Controls for geolocation (toggle, update interval)
+* Controls for geolocation (update interval)
 * Show geolocation info (maybe on hover)
 * Remove jQuery dependency
 * Package as W3C widget (`make widget`)
+* Update an existing place to the current geolocation
 
 ## Ideas
 
 * Undo delete task
-* Update an existing place to the current geolocation
 * Show a dynamic / static Google map
 * Optional due date / start date for tasks
-* Optional tags / hierachy for tasks
-* Grouping places (e.g. to places called "Superstore" have the same tasks)
+* Optional tags / hierachy for tasks (use # or /)
+* Grouping places (e.g. so places called "Superstore" have the same tasks)
 
 ## Design Goals
 
