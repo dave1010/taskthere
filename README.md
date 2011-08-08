@@ -1,8 +1,8 @@
-# To Do There
+# TaskThere
 
 A simple location-based to do list manager. Currently beta quality.
 
-Demo: http://dave1010.github.com/to-do-there/
+Demo: http://taskthere.com
 
 Pull requests / patches welcome.
 
