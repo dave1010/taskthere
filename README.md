@@ -1,8 +1,8 @@
-# To Do There
+# TaskThere
 
 A simple location-based to do list manager. Currently beta quality.
 
-Demo: http://dave1010.github.com/to-do-there/
+Demo: http://taskthere.com
 
 Pull requests / patches welcome.
 
@@ -21,7 +21,7 @@ Pull requests / patches welcome.
   - Delete tasks
   - See a list of tasks associated with a place
 * Fast
-* Doesn't need Internet connection
+* Doesn't need Internet connection (coming soon)
 
 ## To Do
 
@@ -33,6 +33,7 @@ Pull requests / patches welcome.
   - HTML5 application cache manifest (make it offline)
   - Remove jQuery dependency
   - Tests (probably QUnit)
+  - Show help message on first load instead of a prompt
 * Build
   - Package as W3C widget (`make widget`)
   - Maemo desktop widget
