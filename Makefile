@@ -2,7 +2,7 @@ SRC_DIR = src
 DIST_DIR = dist
 
 VER_NUMBER = $(shell cat version.txt)
-DATE=$(shell git log -1 --pretty=format:%ad)
+DATE=$(date)
 VERSION = sed -i "s/@VERSION/${VER_NUMBER}. Built $(DATE)/" $(DIST_DIR)/index.html
 
 all: clean dist
