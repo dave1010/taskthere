@@ -54,7 +54,9 @@ help:
 serve:
 	cd $(DIST_DIR); python -m SimpleHTTPServer
 
+git-hooks:
+	cd .git/hooks && ln -s ../../git-hooks/post-receive
 gh-pages:
 	# copy dist/ to gh-pages branch
 
-.PHONY: all dist clean help serve minify prepare
+.PHONY: all dist clean help serve minify prepare git-hooks
